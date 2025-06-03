@@ -1,23 +1,33 @@
-# Security Policy
+# Security Measures and Learnings for Our T-Pot Project (by Rayane Ibn Atik, Hassan Basli, and Sadki Amine)
 
-## Supported Versions
+As part of our project on the T-Pot honeypot system, our group (Rayane Ibn Atik, Hassan Basli, and Sadki Amine) considered several security aspects related to setting up and running a system designed to attract and record malicious traffic. This document outlines our approach and key learnings.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 24.04.1 | :white_check_mark: |
+## 1. Isolating the Honeypot Environment
+We understood that a honeypot, by its nature, is exposed to attacks. To protect our other systems and the host institution's network, we deployed T-Pot on a dedicated virtual machine. This VM was isolated to the extent possible, ensuring that any potential compromise would be contained.
+Network access to the T-Pot VM was restricted, only allowing necessary inbound traffic to the honeypot services and outbound traffic for system updates and our access for management.
 
+## 2. Secure Access to Management Interfaces
+T-Pot exposes management interfaces (e.g., SSH, web UI for Kibana) on non-standard ports (e.g., SSH on 64295, Web UI on 64297).
+We ensured that strong, unique passwords were used for the OS user account (`<OS_USERNAME>`) and the web interface user (`<WEB_USER>`).
+Access to these management ports was limited, ideally only from our specific IP addresses, if feasible within the project environment.
 
-## Reporting a Vulnerability
+## 3. System Hardening and Updates
+The underlying Linux operating system was kept up-to-date with the latest security patches.
+T-Pot itself is designed to run services in Docker containers, which provides a layer of isolation between services.
+We regularly checked for T-Pot updates as per the project's recommendations, although our project had a fixed duration.
 
-We prioritize the security of T-Pot highly. Often, vulnerabilities in T-Pot components stem from upstream dependencies, including honeypots, Docker images, tools, or packages. We are committed to working together to resolve any issues effectively.
+## 4. Monitoring the Honeypot Itself
+While the honeypot's purpose is to be attacked, we also monitored its system health (CPU, memory, disk usage) to ensure it wasn't being overwhelmed in a way that could affect its stability or data collection capabilities.
 
-Please follow these steps before reporting a potential vulnerability:
+## 5. Data Handling
+We were mindful that the data collected (e.g., attacker IPs, malware samples if any) should be handled responsibly, in line with academic integrity and ethical considerations discussed in our course.
 
-1. Verify that the behavior you've observed isn't already documented as a normal aspect or unrelated issue of T-Pot. For example, Cowrie may initiate outgoing connections, or T-Pot might open all possible TCP ports — a feature enabled by Honeytrap.
-2. Clearly identify which component is vulnerable (e.g., a specific honeypot, Docker image, tool, package) and isolate the issue.
-3. Provide a detailed description of the issue, including log and, if available, debug files. Include all steps necessary to reproduce the vulnerability. If you have a proposed solution, hotfix, or patch, please be prepared to submit a pull request (PR).
-4. Check whether the vulnerability is already known upstream. If there is an existing fix or patch, include that information in your report.
+## 6. Understanding Risks
+We learned that no honeypot is perfectly secure. There's always a theoretical risk that an attacker could find a vulnerability in a honeypot service and use it to compromise the honeypot system itself (a 'breakout').
+This reinforced the importance of the isolation measures mentioned earlier and not placing any sensitive or real data on the honeypot system.
 
-This approach ensures a thorough and efficient resolution process.
-
-We aim to respond as quickly as possible. If you believe the issue poses an immediate threat to the entire T-Pot community, you can expedite the process by responsibly alerting our [CERT](https://www.telekom.com/en/corporate-responsibility/data-protection-data-security/security/details/introducing-deutsche-telekom-cert-358316).
+## 7. Key Security Learnings by Our Group (Rayane, Hassan, Sadki)
+- The importance of layered security (network isolation, strong credentials, containerization).
+- Understanding that even systems designed to be 'attacked' require careful security management.
+- The value of non-standard ports for management interfaces to reduce casual scanning.
+- The ongoing need for vigilance and updates in any internet-exposed system.
